@@ -11,8 +11,8 @@ dist/
 .env.*.local
 
 # Prisma
-prisma/*.db
-prisma/migrations/
+blog-api/prisma/*.db
+blog-api/prisma/migrations/
 
 # Logs
 logs
