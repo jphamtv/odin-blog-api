@@ -4,7 +4,9 @@
   "description": "Blog API project",
   "main": "app.ts",
   "scripts": {
-    "start": "node --watch app.ts"
+    "dev": "ts-node-dev src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
   },
   "author": "",
   "license": "ISC",
