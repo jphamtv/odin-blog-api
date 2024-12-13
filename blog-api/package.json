@@ -1,0 +1,14 @@
+{
+  "name": "odin-blog-api",
+  "version": "1.0.0",
+  "description": "Blog API project",
+  "main": "app.ts",
+  "scripts": {
+    "start": "node --watch app.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
