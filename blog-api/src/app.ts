@@ -1,8 +1,8 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import authRouter from './routes/authRouter';
-import postsRouter from './routes/postsRouter';
-import commentsRouter from './routes/commentsRouter';
+// import postsRouter from './routes/postsRouter';
+// import commentsRouter from './routes/commentsRouter';
 
 const app: Express = express();
 
@@ -29,7 +29,7 @@ app.use(cors(corsOptions));
 
 // Routes
 app.use('api/auth', authRouter);
-app.use('api/posts', postsRouter);
-app.use('api/comments', commentsRouter);
+// app.use('api/posts', postsRouter);
+// app.use('api/comments', commentsRouter);
  
 export default app;
