@@ -1,5 +1,7 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import passport from 'passport';
+import initializePassport from './config/passportConfig';
 import authRouter from './routes/authRouter';
 // import postsRouter from './routes/postsRouter';
 // import commentsRouter from './routes/commentsRouter';
@@ -27,8 +29,12 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
+// Initialize Passport
+initializePassport();
+app.use(passport.initialize());
+
 // Routes
-app.use('api/auth', authRouter);
+app.use('/api/auth', authRouter);
 // app.use('api/posts', postsRouter);
 // app.use('api/comments', commentsRouter);
  

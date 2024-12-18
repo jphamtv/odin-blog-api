@@ -52,7 +52,7 @@ export const loginUser = async (
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    const { username, email, password } = req.body;
 
     // Check if user exists
     const existingUser = await getByEmail(email);
@@ -61,7 +61,7 @@ export const registerUser = async (req: Request, res: Response) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await createNew(email, hashedPassword);
+    const user = await createNew(username, email, hashedPassword);
 
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {

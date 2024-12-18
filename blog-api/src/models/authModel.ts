@@ -1,9 +1,10 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-export const createNew = async (email: string, hashedPassword: string) => {
+export const createNew = async (username: string, email: string, hashedPassword: string) => {
   return prisma.user.create({
     data: {
+      username,
       email,
       password: hashedPassword,
     },

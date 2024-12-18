@@ -6,7 +6,10 @@ import { AuthenticatedRequest } from '../types/authTypes';
 export const authenticateJWT = passport.authenticate('jwt', { session: false });
 
 // Check if user is admin
-export const isAdmin = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const isAdmin = (
+  req: AuthenticatedRequest,
+  res: Response, next: NextFunction
+) => {
   if (!req.user?.isAdmin) {
     return res.status(403).json({
       message: 'Admin access required'
