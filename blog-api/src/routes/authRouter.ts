@@ -7,13 +7,7 @@ import { User, AuthError } from '../types/authTypes';
 const router = express.Router();
 
 // Public routes
-router.post("/register", async (req, res, next) => {
-  try {
-    await registerUser(req, res);
-  } catch (error) {
-    next(error);
-  }
-});
+router.post("/register", registerUser);
 
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", { session: false }, (err: AuthError, user: User, info: { message: string }) => {
