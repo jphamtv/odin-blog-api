@@ -6,7 +6,7 @@ export interface JWTConfig {
   expiresIn: string | number;
 }
 
-export const jwtConfig = {
+export const jwtConfig: JWTConfig = {
   secret: process.env.JWT_SECRET || 'your-secret-key',
   expiresIn: '24h',
 };
