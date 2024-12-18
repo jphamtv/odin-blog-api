@@ -19,8 +19,10 @@ router.post("/login", (req, res, next) => {
         .status(401)
         .json({ message: info.message || "Invalid credentials" });
     }
-    // Attach user to request
+
+    // Attach user to request if successful
     req.user = user;
+    
     // Call the login handler to generate token
     return loginUser(req as AuthenticatedRequest, res);
   })(req, res, next);

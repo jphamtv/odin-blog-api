@@ -4,6 +4,7 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import { jwtConfig } from './jwtConfig';
 import { getByEmail, getById } from "../models/authModel";
+import { JwtPayload } from '../types/jwtTypes';
 
 function initialize() {
   // Local Strategy - for login
@@ -34,10 +35,6 @@ function initialize() {
       }
     })
   );
-
-  interface JwtPayload {
-    id: string;
-  }
 
   // JWT Strategy - for protected routes
   const jwtOptions = {
