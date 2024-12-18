@@ -31,8 +31,8 @@ app.use(passport.initialize());
 
 // Routes
 app.use('/api/auth', authRouter);
-// app.use('api/posts', postsRouter);
-// app.use('api/comments', commentsRouter);
+// app.use('/api/posts', postsRouter);
+// app.use('/api/comments', commentsRouter);
 
 // Error handing
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
