@@ -37,7 +37,7 @@ const generateToken = (user: Pick<User, 'id' | 'email'>) => {
 
 export const loginUser = async (
   req: AuthenticatedRequest,
-  res: Response<LoginResponse>
+  res: Response<LoginResponse | { message: string }>
 ) => {
   try {
     // Passport puts the user on req.user after successful auth
@@ -47,7 +47,7 @@ export const loginUser = async (
       return res.status(401).json({
         message: 'Authentication failed',
         token: '',
-        user: null,
+        user: null as any,
       });
     }
 
