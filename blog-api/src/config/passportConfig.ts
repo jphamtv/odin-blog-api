@@ -4,7 +4,7 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import { PrismaClient } from "@prisma/client";
 import { jwtConfig } from './jwtConfig';
-const { getByEmail, getById } = require("../models/authModel");
+import { getByEmail, getById } from "../models/authModel";
 
 const prisma = new PrismaClient();
 
