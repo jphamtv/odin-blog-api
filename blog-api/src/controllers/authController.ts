@@ -45,9 +45,7 @@ export const loginUser = async (
 
     if (!user) {
       return res.status(401).json({
-        message: 'Authentication failed',
-        token: '',
-        user: null as any,
+        message: 'Authentication failed'
       });
     }
 

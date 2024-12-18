@@ -10,7 +10,12 @@ export interface User {
   updatedAt: Date;
 }
 
-export interface AuthenticatedUser extends Omit<User, 'password'> { }
+export interface AuthenticatedUser {
+  id: string;
+  email: string;
+  username: string;
+  isAdmin: boolean;
+}
 
 export interface AuthenticatedRequest extends Request {
   user?: AuthenticatedUser;
