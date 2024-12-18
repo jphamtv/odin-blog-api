@@ -8,7 +8,7 @@ import { User, AuthenticatedRequest, LoginResponse } from '../types/authTypes';
 
 const validateUser = [
   body('username').trim()
-    .isLength({ max: 200 }).withMessage(`Username must not exceed 200 characters`)
+    .isLength({ min: 3, max: 200 }).withMessage(`Username must between 3 and 200 characters`)
     .matches(/^[a-z0-9 '-]+$/i).withMessage('Username contains invalid characters'),
   body('email').trim()
     .isEmail().withMessage(`Invalid email`),
@@ -78,7 +78,7 @@ export const registerUser = [
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    
+
     try {
       const { username, email, password } = req.body;
 
