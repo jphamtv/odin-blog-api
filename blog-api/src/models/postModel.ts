@@ -2,10 +2,10 @@ import { PrismaClient, Prisma } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const create = async (
-  username: string,
-  email: string,
-  hashedPassword: string,
-  isAdmin = false
+  title: string,
+  text: string,
+  isPublished = false,
+  authorId: string
 ) => {
   const data: Prisma.UserCreateInput = {
     username,
@@ -13,23 +13,38 @@ export const create = async (
     password: hashedPassword,
     isAdmin
   };
-  return prisma.user.create({ data });
+  return prisma.post.create({ data });
 };
 
-export const getByEmail = async (email: string) => {
-  return prisma.user.findUnique({
+export const getAll = async (email: string) => {
+  return prisma.post.findUnique({
     where: { email },
   });
 };
 
 export const getById = async (id: string) => {
-  return prisma.user.findUnique({
+  return prisma.post.findUnique({
+    where: { id },
+  });
+};
+
+const update = async (id, name) => {
+  return prisma.post.update({
+    where: { id },
+    data: { name },
+  });
+};
+
+const deleteById = async (id) => {
+  return prisma.post.delete({
     where: { id },
   });
 };
 
 export default {
-  createNew,
-  getByEmail,
+  create,
+  getAll,
   getById,
+  update,
+  deleteById,
 };
