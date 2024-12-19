@@ -5,7 +5,7 @@ export const createNew = async (
   username: string,
   email: string,
   hashedPassword: string,
-  isAdmin = false
+  isAdmin: boolean = false
 ) => {
   const data: Prisma.UserCreateInput = {
     username,
