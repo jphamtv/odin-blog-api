@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import { create, getAll, getById, update, deleteById } from '../models/postModel';
-import { AuthRequest } from '../types/authTypes';
 
 const validateCreatePost = [
   body('title').trim()
@@ -28,10 +27,14 @@ const validateUpdatePost = [
 
 export const createPost = [
   validateCreatePost,
-  async (req: AuthRequest, res: Response) => {
+  async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
+    }
+
+    if (!req.user) {
+      return res.status(401).json({ message: 'Unauthorized' });
     }
     
     try {
@@ -55,7 +58,11 @@ export const getAllPosts = async (req: Request, res: Response) => {
   }
 };
 
-export const getPostById = async (req: AuthRequest, res: Response) => {
+export const getPostById = async (req: Request, res: Response) => {
+  if (!req.user) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
   try {
     const post = await getById(req.params.id);
 
@@ -77,10 +84,14 @@ export const getPostById = async (req: AuthRequest, res: Response) => {
  
 export const updatePost = [
   validateUpdatePost,
-  async (req: AuthRequest, res: Response) => {
+  async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
+    }
+
+    if (!req.user) {
+      return res.status(401).json({ message: 'Unauthorized' });
     }
 
     try {
@@ -110,7 +121,11 @@ export const updatePost = [
   }
 ];
  
-export const deletePost = async (req: AuthRequest, res: Response) => {
+export const deletePost = async (req: Request, res: Response) => {
+  if (!req.user) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+  
   try {
     const existingPost = await getById(req.params.id);
 
@@ -130,5 +145,3 @@ export const deletePost = async (req: AuthRequest, res: Response) => {
   }
  };
 
-
-export default { createPost, getAllPosts, getPostById, updatePost, deletePost };

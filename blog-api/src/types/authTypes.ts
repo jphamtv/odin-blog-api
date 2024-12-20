@@ -17,10 +17,6 @@ export interface AuthenticatedUser {
   isAdmin: boolean;
 }
 
-export interface AuthenticatedRequest extends Request {
-  user?: AuthenticatedUser;
-}
-
 export interface LoginResponse {
   message: string;
   token: string;
@@ -30,12 +26,4 @@ export interface LoginResponse {
 export interface AuthError {
   message: string;
   status?: number;
-}
-
-export interface AuthRequest extends Request {
-  user: {
-    id: string;
-    username: string;
-    isAdmin: boolean;
-  }
 }

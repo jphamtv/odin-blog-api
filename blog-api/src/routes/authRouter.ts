@@ -2,7 +2,7 @@ import express, { RequestHandler } from 'express';
 import passport from 'passport';
 import { loginUser, registerUser } from '../controllers/authController';
 import { authenticateJWT } from '../middleware/authMiddleware';
-import { User, AuthError, AuthenticatedRequest } from '../types/authTypes';
+import { User, AuthError } from '../types/authTypes';
 
 const router = express.Router();
 
@@ -24,7 +24,7 @@ router.post("/login", (req, res, next) => {
     req.user = user;
     
     // Call the login handler to generate token
-    return loginUser(req as AuthenticatedRequest, res);
+    return loginUser(req, res);
   })(req, res, next);
 });
 

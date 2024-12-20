@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs'
 import { body, validationResult } from 'express-validator';
 import { jwtConfig } from '../config/jwtConfig';
 import { getByEmail, createNew } from '../models/authModel';
-import { User, AuthenticatedRequest, LoginResponse } from '../types/authTypes';
+import { User, LoginResponse } from '../types/authTypes';
 
 const validateUser = [
   body('username').trim()
@@ -36,7 +36,7 @@ const generateToken = (user: Pick<User, 'id' | 'email'>) => {
 };
 
 export const loginUser = async (
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response<LoginResponse | { message: string }>
 ) => {
   try {
@@ -96,5 +96,3 @@ export const registerUser = [
     }
   }
 ];
-
-export default { loginUser, registerUser };

@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { RequestHandler } from 'express';
 import {
   createPost,
   getAllPosts,
@@ -12,7 +12,7 @@ const router = express.Router();
 
 // Public routes
 router.get('/', getAllPosts);
-router.get('/:id', getPostById);
+router.get('/:id', getPostById as RequestHandler);
 
 // Protected routes
 router.post('/', authenticateJWT, createPost as RequestHandler[]);
