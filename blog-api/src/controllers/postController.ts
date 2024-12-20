@@ -45,7 +45,7 @@ export const createPost = [
   }
 ];
 
-const getAllPosts = async (req: Request, res: Response) => {
+export const getAllPosts = async (req: Request, res: Response) => {
   try {
     const posts = await getAll();
     res.json(posts);
@@ -55,7 +55,7 @@ const getAllPosts = async (req: Request, res: Response) => {
   }
 };
 
-const getPostById = async (req: AuthRequest, res: Response) => {
+export const getPostById = async (req: AuthRequest, res: Response) => {
   try {
     const post = await getById(req.params.id);
 
@@ -75,14 +75,14 @@ const getPostById = async (req: AuthRequest, res: Response) => {
   }
 };
  
-const updatePost = [
+export const updatePost = [
   validateUpdatePost,
   async (req: AuthRequest, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    
+
     try {
       const postId = req.params.id;
       const existingPost = await getById(postId);
@@ -110,7 +110,7 @@ const updatePost = [
   }
 ];
  
-const deletePost = async (req: AuthRequest, res: Response) => {
+export const deletePost = async (req: AuthRequest, res: Response) => {
   try {
     const existingPost = await getById(req.params.id);
 
