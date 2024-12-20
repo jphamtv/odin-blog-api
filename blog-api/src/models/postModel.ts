@@ -35,7 +35,7 @@ export const getById = async (id: string) => {
   });
 };
 
-const update = async (
+export const update = async (
   id: string,
   data: Prisma.PostUpdateInput
 ) => {
@@ -50,7 +50,7 @@ const update = async (
   });
 };
 
-const deleteById = async (id: string) => {
+export const deleteById = async (id: string) => {
   return prisma.post.delete({
     where: { id },
   });

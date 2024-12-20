@@ -31,3 +31,11 @@ export interface AuthError {
   message: string;
   status?: number;
 }
+
+export interface AuthRequest extends Request {
+  user: {
+    id: string;
+    username: string;
+    isAdmin: boolean;
+  }
+}
