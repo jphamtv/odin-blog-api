@@ -1,4 +1,4 @@
-import express, { RequestHandler, Response } from 'express';
+import express from 'express';
 import passport from 'passport';
 import { registerUser, loginUser, logoutUser } from '../controllers/authController';
 import { authenticateJWT } from '../middleware/authMiddleware';
@@ -7,7 +7,7 @@ import { User, AuthError, AuthRequest } from '../types/authTypes';
 const router = express.Router();
 
 // Public routes
-router.post("/register", registerUser as RequestHandler[]);
+router.post("/register", registerUser);
 
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", { session: false }, (err: AuthError, user: User, info: { message: string }) => {
@@ -24,7 +24,7 @@ router.post("/login", (req, res, next) => {
     req.user = user;
     
     // Call the login handler to generate token
-    return loginUser(req, res);
+    return loginUser(req as AuthRequest, res);
   })(req, res, next);
 });
 

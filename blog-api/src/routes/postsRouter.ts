@@ -15,8 +15,8 @@ router.get('/', getAllPosts);
 router.get('/:id', getPostById as RequestHandler);
 
 // Protected routes
-router.post('/', authenticateJWT, createPost as RequestHandler[]);
-router.put('/:id', authenticateJWT, updatePost as RequestHandler[]);
-router.delete('/:id', authenticateJWT, deletePost as RequestHandler);
+router.post('/', authenticateJWT, createPost);
+router.put('/:id', authenticateJWT, updatePost);
+router.delete('/:id', authenticateJWT, deletePost as unknown as RequestHandler);
 
 export default router;

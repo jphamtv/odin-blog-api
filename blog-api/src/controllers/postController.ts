@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response, RequestHandler } from 'express';
 import { body, validationResult } from 'express-validator';
 import { create, getAll, getById, update, deleteById } from '../models/postModel';
 import { AuthRequest } from '../types/authTypes';
@@ -27,7 +27,7 @@ const validateUpdatePost = [
 ];
 
 export const createPost = [
-  validateCreatePost,
+  ...validateCreatePost,
   async (req: AuthRequest, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -39,23 +39,23 @@ export const createPost = [
       const post = await create(title, text, req.user.id);
       res.json(post);
     } catch (err) {
-      console.error("Create error", err);
+      console.error("Create error: ", err);
       res.status(500).json({ message: "Error creating post" });
     }
   }
-];
+] as RequestHandler[];
 
 export const getAllPosts = async (req: Request, res: Response) => {
   try {
     const posts = await getAll();
     res.json(posts);
   } catch (err) {
-    console.error("Fetching error", err);
+    console.error("Fetching error: ", err);
     res.status(500).json({ message: "Error fetching posts" });
   }
 };
 
-export const getPostById = async (req: AuthRequest, res: Response) => {
+export const getPostById = async (req: Request, res: Response) => {
   try {
     const post = await getById(req.params.id);
 
@@ -63,20 +63,20 @@ export const getPostById = async (req: AuthRequest, res: Response) => {
       return res.status(404).json({ message: "Post not found" });
     }
 
-    // Check authorization for unpublished posts
-    if (!post.isPublished && post.authorId !== req.user.id) {
-      return res.status(403).json({ message: "Unauthorized" });
+    // For public route, only return published posts
+    if (!post.isPublished) {
+      return res.status(404).json({ message: "Post not found or not published" });
     }
 
     res.json(post);
   } catch (err) {
-    console.error("Fetching error", err);
+    console.error("Fetching error: ", err);
     res.status(500).json({ message: "Error getting post" });
   }
 };
  
 export const updatePost = [
-  validateUpdatePost,
+  ...validateUpdatePost,
   async (req: AuthRequest, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -92,7 +92,7 @@ export const updatePost = [
       }
 
       if (existingPost.authorId !== req.user.id) {
-        return res.status(403).json({ message: "Unauthorized" });
+        return res.status(403).json({ message: "Not authorized to update this post" });
       }
 
       const { title, text, isPublished } = req.body;
@@ -104,17 +104,13 @@ export const updatePost = [
 
       res.json(post);
     } catch (err) {
-      console.error("Update error", err);
+      console.error("Update error: ", err);
       res.status(500).json({ message: "Error updating post" });
     }
   }
-];
+] as RequestHandler[];
  
-export const deletePost = async (req: Request, res: Response) => {
-  if (!req.user) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-  
+export const deletePost = async (req: AuthRequest, res: Response) => {
   try {
     const existingPost = await getById(req.params.id);
 
@@ -123,13 +119,13 @@ export const deletePost = async (req: Request, res: Response) => {
     }
 
     if (existingPost.authorId !== req.user.id) {
-      return res.status(403).json({ message: "Unauthorized" });
+      return res.status(403).json({ message: "Not authorized to delete this post" });
     }
 
     await deleteById(req.params.id);
     res.json({ message: 'Post deleted successfully' });
   } catch (err) {
-    console.error("Delete error", err);
+    console.error("Delete error: ", err);
     res.status(500).json({ message: "Error deleting post" });
   }
  };

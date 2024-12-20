@@ -1,10 +1,10 @@
-import { Request, Response } from 'express';
+import { Request, Response, RequestHandler } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs'
 import { body, validationResult } from 'express-validator';
 import { jwtConfig } from '../config/jwtConfig';
 import { getByEmail, createNew } from '../models/authModel';
-import { User, LoginResponse } from '../types/authTypes';
+import { LoginResponse, AuthRequest } from '../types/authTypes';
 
 const validateUser = [
   body('username').trim()
@@ -53,42 +53,39 @@ export const registerUser = [
       res.status(500).json({ message: "Error registering user" });
     }
   }
-];
+] as RequestHandler[];
 
-const generateToken = (user: Pick<User, 'id' | 'email'>) => {
+const generateToken = (id: string) => {
   return jwt.sign(
-    { id: user.id },
+    { id },
     jwtConfig.secret,
     {expiresIn: jwtConfig.expiresIn}
   );
 };
 
 export const loginUser = async (
-  req: Request,
+  req: AuthRequest,
   res: Response<LoginResponse | { message: string }>
 ) => {
   try {
-    // Passport puts the user on req.user after successful auth
-    const user = req.user;
-
-    if (!user) {
+    if (!req.user) {
       return res.status(401).json({
         message: 'Authentication failed'
       });
     }
 
     // Generate token
-    const token = generateToken(user);
+    const token = generateToken(req.user.id);
 
     // Send token and user info
     res.json({
       message: 'Logged in successfully',
       token,
       user: {
-        id: user.id,
-        email: user.email,
-        isAdmin: user.isAdmin,
-        username: user.username
+        id: req.user.id,
+        email: req.user.email,
+        username: req.user.username,
+        isAdmin: req.user.isAdmin
       }
     });
   } catch (err) {
@@ -97,6 +94,6 @@ export const loginUser = async (
   }
 };
 
-export const logoutUser = (req: Request, res: Response) => {
+export const logoutUser = (_req: Request, res: Response) => {
   res.json({ message: 'Logged out successfully' });
 };

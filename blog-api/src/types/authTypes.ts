@@ -1,35 +1,21 @@
 import { Request } from 'express';
+import { User as PrismaUser } from '@prisma/client';
 
-export interface User {
-  id: string;
-  email: string;
-  username: string;
-  password: string;
-  isAdmin: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
+// Use Prisma's generated User type as the base
+export type User = PrismaUser;
 
+// Auth-specific user type - only the fields we need for auth
+export type AuthUser = Pick<PrismaUser, 'id' | 'email' | 'username' | 'isAdmin'>;
+
+// For the authenticated requests
 export interface AuthRequest extends Request {
-  user: {
-    id: string;
-    email: string
-    username: string;
-    isAdmin: boolean;
-  }
-}
-
-export interface AuthenticatedUser {
-  id: string;
-  email: string;
-  username: string;
-  isAdmin: boolean;
+  user: AuthUser;
 }
 
 export interface LoginResponse {
   message: string;
   token: string;
-  user: AuthenticatedUser;
+  user: AuthUser;
 }
 
 export interface AuthError {
