@@ -27,6 +27,34 @@ const validateUser = [
   })
 ];
 
+export const registerUser = [
+  validateUser,
+  async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    
+    try {
+      const { username, email, password } = req.body;
+      
+      // Check if user exists
+      const existingUser = await getByEmail(email);
+      if (existingUser) {
+        return res.status(400).json({ message: "Email already registered" });
+      }
+      
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const user = await createNew(username, email, hashedPassword);
+      
+      res.status(201).json({ message: "User registered successfully" });
+    } catch (error) {
+      console.error("Registration error:", error);
+      res.status(500).json({ message: "Error registering user" });
+    }
+  }
+];
+
 const generateToken = (user: Pick<User, 'id' | 'email'>) => {
   return jwt.sign(
     { id: user.id },
@@ -69,30 +97,6 @@ export const loginUser = async (
   }
 };
 
-export const registerUser = [
-  validateUser,
-  async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    try {
-      const { username, email, password } = req.body;
-
-      // Check if user exists
-      const existingUser = await getByEmail(email);
-      if (existingUser) {
-        return res.status(400).json({ message: "Email already registered" });
-      }
-
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const user = await createNew(username, email, hashedPassword);
-
-      res.status(201).json({ message: "User registered successfully" });
-    } catch (error) {
-      console.error("Registration error:", error);
-      res.status(500).json({ message: "Error registering user" });
-    }
-  }
-];
+export const logoutUser = (req: Request, res: Response) => {
+  res.json({ message: 'Logged out successfully' });
+};

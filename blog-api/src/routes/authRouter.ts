@@ -1,8 +1,8 @@
-import express, { RequestHandler } from 'express';
+import express, { RequestHandler, Response } from 'express';
 import passport from 'passport';
-import { loginUser, registerUser } from '../controllers/authController';
+import { registerUser, loginUser, logoutUser } from '../controllers/authController';
 import { authenticateJWT } from '../middleware/authMiddleware';
-import { User, AuthError } from '../types/authTypes';
+import { User, AuthError, AuthRequest } from '../types/authTypes';
 
 const router = express.Router();
 
@@ -29,10 +29,6 @@ router.post("/login", (req, res, next) => {
 });
 
 // Protected routes
-router.get("/logout", authenticateJWT, (req, res) => {
-  // With JWT, you don't need server-side logout
-  // Client just needs to remove the token
-  res.json({ message: "Logged out successfully" });
-});
+router.get("/logout", authenticateJWT, logoutUser);
 
 export default router;

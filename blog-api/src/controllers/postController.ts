@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import { create, getAll, getById, update, deleteById } from '../models/postModel';
+import { AuthRequest } from '../types/authTypes';
 
 const validateCreatePost = [
   body('title').trim()
@@ -27,15 +28,11 @@ const validateUpdatePost = [
 
 export const createPost = [
   validateCreatePost,
-  async (req: Request, res: Response) => {
+  async (req: AuthRequest, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
-    }
-
-    if (!req.user) {
-      return res.status(401).json({ message: 'Unauthorized' });
-    }
+    }    
     
     try {
       const { title, text } = req.body;
@@ -58,11 +55,7 @@ export const getAllPosts = async (req: Request, res: Response) => {
   }
 };
 
-export const getPostById = async (req: Request, res: Response) => {
-  if (!req.user) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-
+export const getPostById = async (req: AuthRequest, res: Response) => {
   try {
     const post = await getById(req.params.id);
 
@@ -84,14 +77,10 @@ export const getPostById = async (req: Request, res: Response) => {
  
 export const updatePost = [
   validateUpdatePost,
-  async (req: Request, res: Response) => {
+  async (req: AuthRequest, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
-    }
-
-    if (!req.user) {
-      return res.status(401).json({ message: 'Unauthorized' });
     }
 
     try {

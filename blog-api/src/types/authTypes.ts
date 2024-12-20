@@ -10,6 +10,15 @@ export interface User {
   updatedAt: Date;
 }
 
+export interface AuthRequest extends Request {
+  user: {
+    id: string;
+    email: string
+    username: string;
+    isAdmin: boolean;
+  }
+}
+
 export interface AuthenticatedUser {
   id: string;
   email: string;
