@@ -16,10 +16,10 @@ router.get('/published', getAllPublishedPosts);
 router.get('/published/:id', getPostById as RequestHandler);
 
 // Protected routes
-router.get('/admin', authenticateJWT, getAllAdminPosts as RequestHandler);
-router.get('/admin/:id', authenticateJWT, getPostById as RequestHandler);
+router.get('/admin', authenticateJWT, getAllAdminPosts as unknown as RequestHandler);
+router.get('/admin/:id', authenticateJWT, getPostById as unknown as RequestHandler);
 router.post('/', authenticateJWT, createPost);
 router.put('/:id', authenticateJWT, updatePost);
-router.delete('/:id', authenticateJWT, deletePost as RequestHandler);
+router.delete('/:id', authenticateJWT, deletePost as unknown as RequestHandler);
 
 export default router;
