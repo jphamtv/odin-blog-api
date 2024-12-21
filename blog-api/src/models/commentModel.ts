@@ -26,6 +26,16 @@ export const getAll = async (postId: string) => {
   });
 };
 
+
+export const getById = async (id: string) => {
+  return prisma.comment.findUnique({
+    where: { id },
+    include: {
+      user: true
+    }
+  });
+};
+
 export const deleteById = async (id: string) => {
   return prisma.comment.delete({
     where: { id },
