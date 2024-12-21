@@ -20,8 +20,17 @@ export const create = async (
 
 export const getAll = async (postId: string) => {
   return prisma.comment.findMany({
-    where: {
-      postId: postId
+    where: { postId },
+    include: {
+      user: {
+        select: {
+          id: true,
+          username: true
+        }
+      }
+    },
+    orderBy: {
+      createdAt: 'desc'
     }
   });
 };
@@ -31,7 +40,12 @@ export const getById = async (id: string) => {
   return prisma.comment.findUnique({
     where: { id },
     include: {
-      user: true
+      user: {
+        select: {
+          id: true,
+          username: true
+        }
+      }
     }
   });
 };
@@ -41,7 +55,7 @@ export const update = async ( id: string, text: string) => {
     text,
   };
   
-  return prisma.post.update({
+  return prisma.comment.update({
     where: { id },
     data: updateData
   });

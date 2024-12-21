@@ -4,7 +4,7 @@ import passport from 'passport';
 import initializePassport from './config/passportConfig';
 import authRouter from './routes/authRouter';
 import postsRouter from './routes/postsRouter';
-// import commentsRouter from './routes/commentsRouter';
+import commentsRouter from './routes/commentsRouter';
 
 const app: Express = express();
 
@@ -32,7 +32,7 @@ app.use(passport.initialize());
 // Routes
 app.use('/api/auth', authRouter);
 app.use('/api/posts', postsRouter);
-// app.use('/api/comments', commentsRouter);
+app.use('/api/', commentsRouter);
 
 // Error handing
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

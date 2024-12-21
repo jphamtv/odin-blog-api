@@ -19,7 +19,7 @@ export const createComment = [
     
     try {
       const { text } = req.body;
-      const comment = await create(text, req.user.id, req.params.id);
+      const comment = await create(text, req.user.id, req.params.postId);
       res.json(comment);
     } catch (err) {
       console.error("Create comment error: ", err);
@@ -30,7 +30,7 @@ export const createComment = [
 
 export const getAllComments = async (req: Request, res: Response) => {
   try {
-    const comments = await getAll(req.params.id);
+    const comments = await getAll(req.params.postId);
     res.json(comments);
   } catch (err) {
     console.error("Fetching comments error: ", err);
@@ -51,11 +51,11 @@ export const updateComment = [
       const existingComment = await getById(commentId);
 
       if (!existingComment) {
-        return res.status(404).json({ message: 'Post not found' });
+        return res.status(404).json({ message: 'Comment not found' });
       }
 
       if (existingComment.userId !== req.user.id) {
-        return res.status(403).json({ message: "Not authorized to delete this comment" });
+        return res.status(403).json({ message: "Not authorized to edit this comment" });
       }
 
       const { text } = req.body;
@@ -74,10 +74,10 @@ export const deleteComment = async (req: AuthRequest, res: Response) => {
     const existingComment = await getById(req.params.id);
 
     if (!existingComment) {
-      return res.status(404).json({ message: "Post not found" });
+      return res.status(404).json({ message: "Comment not found" });
     }
 
-    if (req.user.id !== existingComment.userId || !req.user.isAdmin ) {
+    if (!(existingComment.userId === req.user.id || req.user.isAdmin) ) {
       return res.status(403).json({ message: "Not authorized to delete this comment" });
     }
 

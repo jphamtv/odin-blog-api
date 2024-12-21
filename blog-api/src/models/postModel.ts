@@ -37,6 +37,9 @@ export const getAllPublished = async () => {
           username: true
         }
       }
+    },
+    orderBy: {
+      publishedAt: 'desc'
     }
   });
 };
