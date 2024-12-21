@@ -18,10 +18,25 @@ export const create = async (
   return prisma.post.create({ data });
 };
 
-export const getAll = async () => {
+export const getAll = async (userId: string) => {
   return prisma.post.findMany({
+    where: {
+      authorId: userId
+    }
+  });
+};
+
+export const getAllPublished = async () => {
+  return prisma.post.findMany({
+    where: {
+      isPublished: true
+    },
     include: {
-      author: true // Include author details in the response
+      author: {
+        select: {
+          username: true
+        }
+      }
     }
   });
 };

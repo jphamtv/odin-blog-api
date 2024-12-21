@@ -1,7 +1,8 @@
 import express, { RequestHandler } from 'express';
 import {
   createPost,
-  getAllPosts,
+  getAllAdminPosts,
+  getAllPublishedPosts,
   getPostById,
   updatePost,
   deletePost
@@ -11,12 +12,14 @@ import { authenticateJWT } from '../middleware/authMiddleware';
 const router = express.Router();
 
 // Public routes
-router.get('/', getAllPosts);
-router.get('/:id', getPostById as RequestHandler);
+router.get('/published', getAllPublishedPosts);
+router.get('/published/:id', getPostById as RequestHandler);
 
 // Protected routes
+router.get('/admin', authenticateJWT, getAllAdminPosts as RequestHandler);
+router.get('/admin/:id', authenticateJWT, getPostById as RequestHandler);
 router.post('/', authenticateJWT, createPost);
 router.put('/:id', authenticateJWT, updatePost);
-router.delete('/:id', authenticateJWT, deletePost as unknown as RequestHandler);
+router.delete('/:id', authenticateJWT, deletePost as RequestHandler);
 
 export default router;

@@ -1,6 +1,6 @@
 import { Request, Response, RequestHandler } from 'express';
 import { body, validationResult } from 'express-validator';
-import { create, getAll, getById, update, deleteById } from '../models/postModel';
+import { create, getAll, getById, update, deleteById, getAllPublished } from '../models/postModel';
 import { AuthRequest } from '../types/authTypes';
 
 const validateCreatePost = [
@@ -45,9 +45,20 @@ export const createPost = [
   }
 ] as RequestHandler[];
 
-export const getAllPosts = async (req: Request, res: Response) => {
+export const getAllAdminPosts = async (req: AuthRequest, res: Response) => {
   try {
-    const posts = await getAll();
+    const userId = req.user.id;
+    const posts = await getAll(userId);
+    res.json(posts);
+  } catch (err) {
+    console.error("Fetching error: ", err);
+    res.status(500).json({ message: "Error fetching posts" });
+  }
+};
+
+export const getAllPublishedPosts = async (req: Request, res: Response) => {
+  try {
+    const posts = await getAllPublished();
     res.json(posts);
   } catch (err) {
     console.error("Fetching error: ", err);
@@ -63,9 +74,16 @@ export const getPostById = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Post not found" });
     }
 
-    // For public route, only return published posts
-    if (!post.isPublished) {
-      return res.status(404).json({ message: "Post not found or not published" });
+    if (req.path.startsWith('/published')) {
+      // For public route, only return published posts
+      if (!post.isPublished) {
+        return res.status(404).json({ message: "Post not found or not published" });
+      }
+    } else {
+      // For admin route, check if user owns the post
+      if (post.authorId !== (req as AuthRequest).user.id) {
+        return res.status(403).json({ message: "Not authorized to view this post" });
+      }
     }
 
     res.json(post);
