@@ -1,16 +1,16 @@
 import { Request, Response, RequestHandler } from 'express';
 import { body, validationResult } from 'express-validator';
-import { create, getAll, getById, deleteById } from '../models/commentModel';
+import { create, getAll, getById, update, deleteById } from '../models/commentModel';
 import { AuthRequest } from '../types/authTypes';
 
-const validateCreateComment = [
+const validateComment = [
   body('text').trim()
     .isLength({ min: 1 }).withMessage(`Comment content cannot be empty`)
     .escape()
 ];
 
 export const createComment = [
-  ...validateCreateComment,
+  ...validateComment,
   async (req: AuthRequest, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -37,6 +37,37 @@ export const getAllComments = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Error fetching comments" });
   }
 };
+
+export const updateComment = [
+  ...validateComment,
+  async (req: AuthRequest, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const commentId = req.params.id;
+      const existingComment = await getById(commentId);
+
+      if (!existingComment) {
+        return res.status(404).json({ message: 'Post not found' });
+      }
+
+      if (existingComment.userId !== req.user.id) {
+        return res.status(403).json({ message: "Not authorized to delete this comment" });
+      }
+
+      const { text } = req.body;
+      const comment = await update(commentId, text);
+
+      res.json(comment);
+    } catch (err) {
+      console.error("Update comment error: ", err);
+      res.status(500).json({ message: "Error updating comment" });
+    }
+  }
+] as RequestHandler[];
  
 export const deleteComment = async (req: AuthRequest, res: Response) => {
   try {

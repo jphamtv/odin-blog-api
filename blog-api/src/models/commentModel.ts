@@ -36,6 +36,17 @@ export const getById = async (id: string) => {
   });
 };
 
+export const update = async ( id: string, text: string) => {
+  const updateData: Prisma.CommentUpdateInput = {
+    text,
+  };
+  
+  return prisma.post.update({
+    where: { id },
+    data: updateData
+  });
+};
+
 export const deleteById = async (id: string) => {
   return prisma.comment.delete({
     where: { id },
