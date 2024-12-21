@@ -9,7 +9,7 @@ const validateCreateComment = [
     .escape()
 ];
 
-export const createPost = [
+export const createComment = [
   ...validateCreateComment,
   async (req: AuthRequest, res: Response) => {
     const errors = validationResult(req);
