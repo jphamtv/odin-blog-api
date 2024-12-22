@@ -57,7 +57,15 @@ export const update = async ( id: string, text: string) => {
   
   return prisma.comment.update({
     where: { id },
-    data: updateData
+    data: updateData,
+    include: {
+      user: {
+        select: {
+          id: true,
+          username: true
+        }
+      }
+    }
   });
 };
 
