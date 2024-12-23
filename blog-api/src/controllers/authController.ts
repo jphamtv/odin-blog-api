@@ -9,7 +9,7 @@ import { LoginResponse, AuthRequest } from '../types/authTypes';
 const validateUser = [
   body('username').trim()
     .isLength({ min: 3, max: 200 }).withMessage(`Username must between 3 and 200 characters`)
-    .matches(/^[a-z0-9 '-]+$/i).withMessage('Username contains invalid characters'),
+    .matches(/^[a-z0-9 '-_]+$/i).withMessage('Username contains invalid characters'),
   body('email').trim()
     .isEmail().withMessage(`Invalid email`),
   body('password').trim()
@@ -36,7 +36,7 @@ export const registerUser = [
     }
     
     try {
-      const { username, email, password } = req.body;
+      const { username, email, password, isAdmin } = req.body;
       
       // Check if user exists
       const existingUser = await getByEmail(email);
@@ -45,7 +45,7 @@ export const registerUser = [
       }
       
       const hashedPassword = await bcrypt.hash(password, 10);
-      const user = await createNew(username, email, hashedPassword);
+      const user = await createNew(username, email, hashedPassword, isAdmin);
       
       res.status(201).json({ message: "User registered successfully" });
     } catch (error) {
