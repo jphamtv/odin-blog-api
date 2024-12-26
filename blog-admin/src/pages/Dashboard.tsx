@@ -9,6 +9,7 @@ export function Dashboard() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [deletePost, setDeletePost] = useState<Post | null>(null);
 
   useEffect(() => {
     loadPosts();
@@ -18,7 +19,6 @@ export function Dashboard() {
     try {
       setIsLoading(true);
       const response = await apiClient.get<Post[]>('/posts/admin');
-      console.log('Dashboard - API Response:', response);
       setPosts(response || []);
     } catch (err) {
       console.error('Dashboard - Error details:', err);
@@ -30,15 +30,26 @@ export function Dashboard() {
 
   const togglePublish = async (post: Post) => {
     try {
-      console.log('Toggling publish. Current state:', post.isPublished);
       await apiClient.put(`/posts/${post.id}`, {
         isPublished: !post.isPublished
       });
-      console.log('Toggle successful, reloading posts...');
       await loadPosts();
     } catch (err) {
       console.error('Error updating post:', err);
       setError('Failed to update post');
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!deletePost) return;
+
+    try {
+      await apiClient.delete(`/posts/${deletePost.id}`);
+      await loadPosts();
+      setDeletePost(null); // Close the confirmation dialog
+    } catch (err) {
+      console.error('Error deleting post:', err);
+      setError('Failed to delete post');
     }
   };
 
@@ -85,6 +96,13 @@ export function Dashboard() {
                         Edit
                       </Button>
                     </Link>
+                    <Button
+                      variant="danger"
+                      size="small"
+                      onClick={() => setDeletePost(post)}
+                    >
+                      Delete
+                    </Button>
                   </div>
                 </div>
               </li>
@@ -92,6 +110,32 @@ export function Dashboard() {
           </ul>
         )}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      {deletePost && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg p-6 max-w-sm w-full">
+            <h3 className="text-lg font-medium mb-4">Delete Post</h3>
+            <p className="text-gray-500 mb-6">
+              Are you sure you want to delete "{deletePost.title}"? This action cannot be undone.
+            </p>
+            <div className="flex justify-end space-x-4">
+              <Button
+                variant="secondary"
+                onClick={() => setDeletePost(null)}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="danger"
+                onClick={handleDelete}
+              >
+                Delete
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
