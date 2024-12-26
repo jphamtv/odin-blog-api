@@ -24,8 +24,8 @@ export function PostEditor() {
   const loadPost = async () => {
     try {
       setIsLoading(true);
-      const response = await apiClient.get<{ post: Post }>(`/posts/admin/${id}`);
-      const { title, text, isPublished } = response.post;
+      const response = await apiClient.get<Post>(`/posts/admin/${id}`);
+      const { title, text, isPublished } = response;
       setPost({ title, text, isPublished });
     } catch (err) {
       console.error('Error loading post:', err);
@@ -37,7 +37,7 @@ export function PostEditor() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Submitting post:', post); // Debug log
+    setError('');
     
     try {
       setIsLoading(true);
@@ -58,21 +58,15 @@ export function PostEditor() {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { name, value } = e.target;
+    const { name } = e.target;
+    const value = e.target.type === 'checkbox' 
+      ? (e.target as HTMLInputElement).checked 
+      : e.target.value;
     
-    if (name === 'isPublished') {
-      const checkbox = e.target as HTMLInputElement;
-      console.log('Checkbox checked:', checkbox.checked); // Debug log
-      setPost(prev => ({
-        ...prev,
-        isPublished: checkbox.checked
-      }));
-    } else {
-      setPost(prev => ({
-        ...prev,
-        [name]: value
-      }));
-    }
+    setPost(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   if (isLoading && id) {
