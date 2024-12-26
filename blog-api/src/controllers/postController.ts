@@ -9,7 +9,10 @@ const validateCreatePost = [
     .escape(),
   body('text').trim()
     .isLength({ min: 1 }).withMessage(`Post content cannot be empty`)
-    .escape()
+    .escape(),
+  body('isPublished')
+    .optional()
+    .isBoolean().withMessage('isPublished must be true or false')
 ];
 
 const validateUpdatePost = [
@@ -35,8 +38,8 @@ export const createPost = [
     }    
     
     try {
-      const { title, text } = req.body;
-      const post = await create(title, text, req.user.id);
+      const { title, text, isPublished = false } = req.body;
+      const post = await create(title, text, req.user.id, isPublished);
       res.json(post);
     } catch (err) {
       console.error("Create error: ", err);
@@ -117,7 +120,7 @@ export const updatePost = [
       const post = await update(postId, {
         title,
         text,
-        isPublished
+        isPublished: typeof isPublished === 'boolean' ? isPublished : undefined
       });
 
       res.json(post);
@@ -146,5 +149,4 @@ export const deletePost = async (req: AuthRequest, res: Response) => {
     console.error("Delete error: ", err);
     res.status(500).json({ message: "Error deleting post" });
   }
- };
-
+};
