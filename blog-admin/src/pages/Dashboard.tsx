@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Post, PostsResponse } from '../../../shared/types/postTypes';
+import { Post } from '../../../shared/types/postTypes';
 import { apiClient } from '../../../shared/utils/apiClient';
 import { formatDate } from '../../../shared/utils/dateUtils';
 import { Button } from '../../../shared/components/ui';
@@ -17,11 +17,12 @@ export function Dashboard() {
   const loadPosts = async () => {
     try {
       setIsLoading(true);
-      const data = await apiClient.get<PostsResponse>('/posts/admin/all');
-      setPosts(data.posts);
+      const response = await apiClient.get<Post[]>('/posts/admin');
+      console.log('Dashboard - API Response:', response);
+      setPosts(response || []);
     } catch (err) {
+      console.error('Dashboard - Error details:', err);
       setError('Failed to load posts');
-      console.error('Error loading posts:', err);
     } finally {
       setIsLoading(false);
     }
@@ -29,30 +30,32 @@ export function Dashboard() {
 
   const togglePublish = async (post: Post) => {
     try {
+      console.log('Toggling publish. Current state:', post.isPublished);
       await apiClient.put(`/posts/${post.id}`, {
         isPublished: !post.isPublished
       });
-      await loadPosts(); // Reload the posts list
+      console.log('Toggle successful, reloading posts...');
+      await loadPosts();
     } catch (err) {
-      setError('Failed to update post');
       console.error('Error updating post:', err);
+      setError('Failed to update post');
     }
   };
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (error) return <div className="text-red-600">{error}</div>;
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Posts</h1>
+        <h1 className="text-2xl font-bold">Posts ({posts.length})</h1>
         <Link to="/posts/new">
           <Button>New Post</Button>
         </Link>
       </div>
 
       <div className="bg-white shadow overflow-hidden sm:rounded-md">
-        {posts.length === 0 ? (
+        {(!posts || posts.length === 0) ? (
           <div className="p-4 text-center text-gray-500">
             No posts yet. Create your first post!
           </div>

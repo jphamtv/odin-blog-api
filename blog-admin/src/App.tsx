@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from '../../shared/components/auth';
 import { Login } from './pages/Login';
 import { Dashboard } from './pages/Dashboard';
-// import { PostEditor } from './pages/PostEditor';
+import { PostEditor } from './pages/PostEditor';
 import { Layout } from './components/Layout';
 import { ProtectedRoute } from '../../shared/components/auth';
 
@@ -23,8 +23,8 @@ function App() {
           >
             <Route index element={<Navigate to="/posts" replace />} />
             <Route path="posts" element={<Dashboard />} />
-            {/* <Route path="posts/new" element={<PostEditor />} />
-            <Route path="posts/:id/edit" element={<PostEditor />} /> */}
+            <Route path="posts/new" element={<PostEditor />} />
+            <Route path="posts/:id/edit" element={<PostEditor />} />
           </Route>
         </Routes>
       </AuthProvider>
