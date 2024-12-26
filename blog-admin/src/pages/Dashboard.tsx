@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Post } from '../../../shared/types/postTypes';
+import { Post, PostsResponse } from '../../../shared/types/postTypes';
 import { apiClient } from '../../../shared/utils/apiClient';
 import { formatDate } from '../../../shared/utils/dateUtils';
 import { Button } from '../../../shared/components/ui';
@@ -16,10 +16,12 @@ export function Dashboard() {
 
   const loadPosts = async () => {
     try {
-      const response = await apiClient.get<{ posts: Post[] }>('/posts');
-      setPosts(response.posts);
+      setIsLoading(true);
+      const data = await apiClient.get<PostsResponse>('/posts/admin/all');
+      setPosts(data.posts);
     } catch (err) {
       setError('Failed to load posts');
+      console.error('Error loading posts:', err);
     } finally {
       setIsLoading(false);
     }
@@ -30,9 +32,10 @@ export function Dashboard() {
       await apiClient.put(`/posts/${post.id}`, {
         isPublished: !post.isPublished
       });
-      loadPosts(); // Reload the posts list
+      await loadPosts(); // Reload the posts list
     } catch (err) {
       setError('Failed to update post');
+      console.error('Error updating post:', err);
     }
   };
 
@@ -49,36 +52,42 @@ export function Dashboard() {
       </div>
 
       <div className="bg-white shadow overflow-hidden sm:rounded-md">
-        <ul className="divide-y divide-gray-200">
-          {posts.map((post) => (
-            <li key={post.id}>
-              <div className="px-4 py-4 flex items-center justify-between">
-                <div className="min-w-0 flex-1">
-                  <h2 className="text-lg font-medium">{post.title}</h2>
-                  <div className="mt-1 flex items-center space-x-4 text-sm text-gray-500">
-                    <span>{formatDate(post.createdAt)}</span>
-                    <span>•</span>
-                    <span>{post.isPublished ? 'Published' : 'Draft'}</span>
+        {posts.length === 0 ? (
+          <div className="p-4 text-center text-gray-500">
+            No posts yet. Create your first post!
+          </div>
+        ) : (
+          <ul className="divide-y divide-gray-200">
+            {posts.map((post) => (
+              <li key={post.id}>
+                <div className="px-4 py-4 flex items-center justify-between">
+                  <div className="min-w-0 flex-1">
+                    <h2 className="text-lg font-medium">{post.title}</h2>
+                    <div className="mt-1 flex items-center space-x-4 text-sm text-gray-500">
+                      <span>{formatDate(post.createdAt)}</span>
+                      <span>•</span>
+                      <span>{post.isPublished ? 'Published' : 'Draft'}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <Button
+                      variant="secondary"
+                      size="small"
+                      onClick={() => togglePublish(post)}
+                    >
+                      {post.isPublished ? 'Unpublish' : 'Publish'}
+                    </Button>
+                    <Link to={`/posts/${post.id}/edit`}>
+                      <Button variant="primary" size="small">
+                        Edit
+                      </Button>
+                    </Link>
                   </div>
                 </div>
-                <div className="flex items-center space-x-4">
-                  <Button
-                    variant="secondary"
-                    size="small"
-                    onClick={() => togglePublish(post)}
-                  >
-                    {post.isPublished ? 'Unpublish' : 'Publish'}
-                  </Button>
-                  <Link to={`/posts/${post.id}/edit`}>
-                    <Button variant="primary" size="small">
-                      Edit
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );
