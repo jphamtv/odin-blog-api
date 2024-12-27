@@ -5,11 +5,9 @@ import { AuthRequest } from '../types/authTypes';
 
 const validateCreatePost = [
   body('title').trim()
-    .isLength({ min: 1, max: 200 }).withMessage(`Title must between 1 and 200 characters`)
-    .escape(),
+    .isLength({ min: 1, max: 200 }).withMessage(`Title must between 1 and 200 characters`),
   body('text').trim()
-    .isLength({ min: 1 }).withMessage(`Post content cannot be empty`)
-    .escape(),
+    .isLength({ min: 1 }).withMessage(`Post content cannot be empty`),
   body('isPublished')
     .optional()
     .isBoolean().withMessage('isPublished must be true or false')
@@ -18,12 +16,10 @@ const validateCreatePost = [
 const validateUpdatePost = [
   body('title').trim()
     .optional()
-    .notEmpty().withMessage('Title cannot be empty')
-    .escape(),
+    .notEmpty().withMessage('Title cannot be empty'),
   body('text').trim()
     .optional()
-    .notEmpty().withMessage('Post content cannot be empty')
-    .escape(),
+    .notEmpty().withMessage('Post content cannot be empty'),
   body('isPublished')
     .optional()
     .isBoolean().withMessage('isPublished must be true or false')

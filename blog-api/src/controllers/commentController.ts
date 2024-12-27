@@ -6,7 +6,6 @@ import { AuthRequest } from '../types/authTypes';
 const validateComment = [
   body('text').trim()
     .isLength({ min: 1 }).withMessage(`Comment content cannot be empty`)
-    .escape()
 ];
 
 export const createComment = [
