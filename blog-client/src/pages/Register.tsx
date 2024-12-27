@@ -10,23 +10,16 @@ export default function Register() {
     email: '',
     password: ''
   })
-  const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
   const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
-    
-    if (credentials.password !== confirmPassword) {
-      setError('Passwords do not match')
-      return
-    }
 
     try {
-      const { token } = await apiClient.post('/auth/register', credentials)
-      apiClient.setToken(token)
-      navigate('/')
+      await apiClient.post('/auth/register', credentials)
+      navigate('/login', { state: { message: 'Account created successfully. Please login.' } })
     } catch (err) {
       setError('Failed to create account')
     }
@@ -81,20 +74,6 @@ export default function Register() {
               className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none"
               value={credentials.password}
               onChange={e => setCredentials(prev => ({ ...prev, password: e.target.value }))}
-            />
-          </div>
-
-          <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-              Confirm Password
-            </label>
-            <input
-              id="confirmPassword"
-              type="password"
-              required
-              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none"
-              value={confirmPassword}
-              onChange={e => setConfirmPassword(e.target.value)}
             />
           </div>
 
