@@ -48,7 +48,15 @@ export const getById = async (id: string) => {
   return prisma.post.findUnique({
     where: { id },
     include: {
-      author: true
+      author: true,
+      comments: {
+        include: {
+          user: true
+        },
+        orderBy: {
+          createdAt: 'desc'
+        }
+      }
     }
   });
 };
@@ -59,7 +67,7 @@ export const update = async (
 ) => {
   const updateData: Prisma.PostUpdateInput = {
     ...data,
-    publishedAt: data.isPublished ? new Date() : null // Set publishedAt when publishing/re-publishing
+    publishedAt: data.isPublished ? new Date() : null
   };
   
   return prisma.post.update({

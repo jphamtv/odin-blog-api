@@ -15,7 +15,17 @@ export const create = async (
       connect: { id: userId }
     },
   };
-  return prisma.comment.create({ data });
+  return prisma.comment.create({
+    data,
+    include: {
+      user: {
+        select: {
+          id: true,
+          username: true
+        }
+      }
+    }
+  });
 };
 
 export const getAll = async (postId: string) => {
