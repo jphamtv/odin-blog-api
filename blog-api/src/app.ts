@@ -12,12 +12,12 @@ const app: Express = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Basic CORS setup
+// Updated CORS setup to allow both client ports
 const corsOptions = {
   origin:
-  process.env.NODE_ENV === "production"
-  ? process.env.FRONTEND_URL
-  : "http://localhost:5173",
+    process.env.NODE_ENV === "production"
+      ? process.env.FRONTEND_URL
+      : ["http://localhost:5173", "http://localhost:5174"],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
