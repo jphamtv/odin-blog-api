@@ -43,9 +43,9 @@ export const registerUser = [
   }
 ] as RequestHandler[];
 
-const generateToken = (id: string) => {
+const generateToken = (id: string, isAdmin: boolean) => {
   return jwt.sign(
-    { id },
+    { id, isAdmin },
     jwtConfig.secret,
     {expiresIn: jwtConfig.expiresIn}
   );
@@ -62,7 +62,7 @@ export const loginUser = async (
       });
     }
 
-    const token = generateToken(req.user.id);
+    const token = generateToken(req.user.id, req.user.isAdmin);
 
     res.json({
       message: 'Logged in successfully',
