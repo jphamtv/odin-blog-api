@@ -1,16 +1,16 @@
-import React from 'react';
+import { ComponentProps } from 'react';
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends ComponentProps<'input'> {
   label?: string;
   error?: string;
 }
 
-export const Input: React.FC<InputProps> = ({
+export const Input = ({
   label,
   error,
   className = '',
   ...props
-}) => {
+}: InputProps) => {
   return (
     <div className="space-y-1">
       {label && (

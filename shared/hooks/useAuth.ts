@@ -24,23 +24,47 @@ export const useAuthProvider = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const token = apiClient.getToken();
-    if (token) {
-      // Verify token and get user data
-      apiClient.get<AuthResponse>('/auth/verify')
-        .then(response => {
-          setUser(response.user);
-        })
-        .catch(() => {
-          apiClient.removeToken();
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    } else {
-      setIsLoading(false);
-    }
+    const initializeAuth = async () => {
+      const token = apiClient.getToken();
+      if (!token) {
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const response = await apiClient.get<AuthResponse>('/auth/verify');
+        setUser(response.user);
+      } catch (err) {
+        apiClient.removeToken();
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initializeAuth();
   }, []);
+
+  // useEffect(() => {
+  //   const token = apiClient.getToken();
+  //   if (token) {
+  //     // Verify token server side and get user data
+  //     apiClient.get<AuthResponse>('/auth/verify')
+  //       .then(response => {
+  //         setUser(response.user);
+  //       })
+  //       .catch(() => {
+  //         // Invalid token - clear everything
+  //         apiClient.removeToken();
+  //         setUser(null);
+  //       })
+  //       .finally(() => {
+  //         setIsLoading(false);
+  //       });
+  //   } else {
+  //     setIsLoading(false);
+  //   }
+  // }, []);
 
   const login = async (credentials: LoginCredentials) => {
     const response = await apiClient.post<AuthResponse>('/auth/login', credentials);

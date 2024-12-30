@@ -15,7 +15,7 @@ export interface AuthRequest extends Request {
 export interface LoginResponse {
   message: string;
   token: string;
-  user: AuthUser;
+  user: AuthUser | null;
 }
 
 export interface AuthError {

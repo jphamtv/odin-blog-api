@@ -1,12 +1,12 @@
-import React from 'react';
+import { ComponentProps } from 'react';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends ComponentProps<'button'> {
   variant?: 'primary' | 'secondary' | 'danger';
   size?: 'small' | 'medium' | 'large';
   isLoading?: boolean;
 }
 
-export const Button: React.FC<ButtonProps> = ({
+export const Button = ({
   children,
   variant = 'primary',
   size = 'medium',
@@ -14,7 +14,7 @@ export const Button: React.FC<ButtonProps> = ({
   className = '',
   disabled,
   ...props
-}) => {
+}: ButtonProps) => {
   const baseStyles = 'rounded font-semibold transition-colors focus:outline-none focus:ring-2';
   
   const variants = {

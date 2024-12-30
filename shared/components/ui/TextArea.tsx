@@ -1,16 +1,16 @@
-import React from 'react';
+import { ComponentProps } from 'react';
 
-interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface TextAreaProps extends ComponentProps<'textarea'> {
   label?: string;
   error?: string;
 }
 
-export const TextArea: React.FC<TextAreaProps> = ({
+export const TextArea = ({
   label,
   error,
   className = '',
   ...props
-}) => {
+}: TextAreaProps) => {
   return (
     <div className="space-y-1">
       {label && (
