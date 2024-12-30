@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Post } from '../../../shared/types/postTypes'
+import { formatDate } from '../../../shared/utils/dateUtils'
 
 interface PostListProps {
   posts: Post[]
@@ -16,7 +17,7 @@ export default function PostList({ posts }: PostListProps) {
           </p>
           <div className="flex justify-between items-center text-sm text-gray-500">
             <span>By {post.author.username}</span>
-            <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+            <span>{formatDate(post.createdAt)}</span>
           </div>
           <Link
             to={`/posts/${post.id}`}
