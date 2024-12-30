@@ -45,27 +45,6 @@ export const useAuthProvider = () => {
     initializeAuth();
   }, []);
 
-  // useEffect(() => {
-  //   const token = apiClient.getToken();
-  //   if (token) {
-  //     // Verify token server side and get user data
-  //     apiClient.get<AuthResponse>('/auth/verify')
-  //       .then(response => {
-  //         setUser(response.user);
-  //       })
-  //       .catch(() => {
-  //         // Invalid token - clear everything
-  //         apiClient.removeToken();
-  //         setUser(null);
-  //       })
-  //       .finally(() => {
-  //         setIsLoading(false);
-  //       });
-  //   } else {
-  //     setIsLoading(false);
-  //   }
-  // }, []);
-
   const login = async (credentials: LoginCredentials) => {
     const response = await apiClient.post<AuthResponse>('/auth/login', credentials);
     apiClient.setToken(response.token);
