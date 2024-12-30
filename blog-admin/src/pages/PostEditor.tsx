@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Post } from '../../../shared/types/postTypes';
 import { apiClient } from '../../../shared/utils/apiClient';
@@ -15,13 +15,7 @@ export function PostEditor() {
     isPublished: false
   });
 
-  useEffect(() => {
-    if (id) {
-      loadPost();
-    }
-  }, [id]);
-
-  const loadPost = async () => {
+  const loadPost = useCallback(async () => {
     try {
       setIsLoading(true);
       const response = await apiClient.get<Post>(`/posts/admin/${id}`);
@@ -33,7 +27,14 @@ export function PostEditor() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    if (id) {
+      loadPost();
+    }
+  }, [id, loadPost]);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
