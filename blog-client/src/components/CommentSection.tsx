@@ -37,6 +37,7 @@ export default function CommentSection({ postId, comments: initialComments }: Co
       setNewComment('')
     } catch (err) {
       setError('Failed to post comment')
+      console.error('Post comment error: ', err);
     }
   }
 
@@ -55,6 +56,7 @@ export default function CommentSection({ postId, comments: initialComments }: Co
       setEditingComment(null)
     } catch (err) {
       setError('Failed to update comment')
+      console.error('Update comment error: ', err);
     }
   }
 
@@ -66,6 +68,7 @@ export default function CommentSection({ postId, comments: initialComments }: Co
       setComments(prev => prev.filter(c => c.id !== commentId))
     } catch (err) {
       setError('Failed to delete comment')
+      console.error('Delete comment error: ', err);
     }
   }
 
