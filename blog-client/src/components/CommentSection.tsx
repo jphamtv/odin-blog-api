@@ -4,6 +4,7 @@ import { Comment, CreateCommentInput, UpdateCommentInput } from '../../../shared
 import { User } from '../../../shared/types/authTypes'
 import { apiClient } from '../../../shared/utils/apiClient'
 import { Button } from '../../../shared/components/ui'
+import { formatRelativeDate } from '../../../shared/utils/dateUtils'
 
 interface CommentSectionProps {
   postId: string
@@ -143,7 +144,7 @@ export default function CommentSection({ postId, comments: initialComments }: Co
                   <div>
                     <span>{comment.user.username}</span>
                     <span className="mx-2">•</span>
-                    <span>{new Date(comment.createdAt).toLocaleDateString()}</span>
+                    <span>{formatRelativeDate(comment.createdAt)}</span>
                   </div>
                   <div className="flex gap-2">
                     {currentUser?.id === comment.userId && (
