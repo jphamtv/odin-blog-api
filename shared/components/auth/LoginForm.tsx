@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { useAuth } from '../../hooks/useAuth';
-import { validateForm } from '../../utils/validation';
-import { Button, Input } from '../ui';
+import React, { useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
+import { validateForm } from "../../utils/validation";
+import { Button, Input } from "../ui";
 
 interface LoginFormProps {
   onSuccess?: () => void;
@@ -10,15 +10,15 @@ interface LoginFormProps {
 export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
   const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [values, setValues] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     const errors = validateForm(values);
     if (Object.keys(errors).length > 0) {
@@ -30,16 +30,16 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
       await login(values);
       onSuccess?.();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed');
+      setError(err instanceof Error ? err.message : "Login failed");
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValues(prev => ({
+    setValues((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     }));
   };
 
@@ -63,14 +63,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
         autoComplete="current-password"
         required
       />
-      {error && (
-        <p className="text-red-600 text-sm">{error}</p>
-      )}
-      <Button
-        type="submit"
-        isLoading={isLoading}
-        className="w-full"
-      >
+      {error && <p className="text-red-600 text-sm">{error}</p>}
+      <Button type="submit" isLoading={isLoading} className="w-full">
         Log In
       </Button>
     </form>

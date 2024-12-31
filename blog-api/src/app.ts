@@ -1,10 +1,10 @@
-import express, { Express, Request, Response, NextFunction } from 'express';
-import cors from 'cors';
-import passport from 'passport';
-import initializePassport from './config/passportConfig';
-import authRouter from './routes/authRouter';
-import postsRouter from './routes/postsRouter';
-import commentsRouter from './routes/commentsRouter';
+import express, { Express, Request, Response, NextFunction } from "express";
+import cors from "cors";
+import passport from "passport";
+import initializePassport from "./config/passportConfig";
+import authRouter from "./routes/authRouter";
+import postsRouter from "./routes/postsRouter";
+import commentsRouter from "./routes/commentsRouter";
 
 const app: Express = express();
 
@@ -30,14 +30,14 @@ initializePassport();
 app.use(passport.initialize());
 
 // Routes
-app.use('/api/auth', authRouter);
-app.use('/api/posts', postsRouter);
-app.use('/api/', commentsRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/posts", postsRouter);
+app.use("/api/", commentsRouter);
 
 // Error handing
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err); // Log error for debugging
-  res.status(500).json({ error: 'Something went wrong' }); // Send simple message to user to see
+  res.status(500).json({ error: "Something went wrong" }); // Send simple message to user to see
 });
 
 export default app;

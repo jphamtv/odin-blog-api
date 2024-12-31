@@ -1,5 +1,5 @@
-import { User } from './authTypes';
-import { Comment } from './commentTypes';
+import { User } from "./authTypes";
+import { Comment } from "./commentTypes";
 
 export interface Post {
   id: string;

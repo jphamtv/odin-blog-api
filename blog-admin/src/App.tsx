@@ -1,10 +1,10 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from '../../shared/components/auth';
-import { Login } from './pages/Login';
-import { Dashboard } from './pages/Dashboard';
-import { PostEditor } from './pages/PostEditor';
-import { Layout } from './components/Layout';
-import { ProtectedRoute } from '../../shared/components/auth';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider } from "../../shared/components/auth";
+import { Login } from "./pages/Login";
+import { Dashboard } from "./pages/Dashboard";
+import { PostEditor } from "./pages/PostEditor";
+import { Layout } from "./components/Layout";
+import { ProtectedRoute } from "../../shared/components/auth";
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
-          
+
           <Route
             path="/"
             element={

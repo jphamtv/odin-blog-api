@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Post } from '../../../shared/types/postTypes';
-import { apiClient } from '../../../shared/utils/apiClient';
-import { formatDate } from '../../../shared/utils/dateUtils';
-import { Button } from '../../../shared/components/ui';
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Post } from "../../../shared/types/postTypes";
+import { apiClient } from "../../../shared/utils/apiClient";
+import { formatDate } from "../../../shared/utils/dateUtils";
+import { Button } from "../../../shared/components/ui";
 
 export function Dashboard() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [deletePost, setDeletePost] = useState<Post | null>(null);
 
   useEffect(() => {
@@ -18,11 +18,11 @@ export function Dashboard() {
   const loadPosts = async () => {
     try {
       setIsLoading(true);
-      const response = await apiClient.get<Post[]>('/posts/admin');
+      const response = await apiClient.get<Post[]>("/posts/admin");
       setPosts(response || []);
     } catch (err) {
-      console.error('Dashboard - Error details:', err);
-      setError('Failed to load posts');
+      console.error("Dashboard - Error details:", err);
+      setError("Failed to load posts");
     } finally {
       setIsLoading(false);
     }
@@ -31,12 +31,12 @@ export function Dashboard() {
   const togglePublish = async (post: Post) => {
     try {
       await apiClient.put(`/posts/${post.id}`, {
-        isPublished: !post.isPublished
+        isPublished: !post.isPublished,
       });
       await loadPosts();
     } catch (err) {
-      console.error('Error updating post:', err);
-      setError('Failed to update post');
+      console.error("Error updating post:", err);
+      setError("Failed to update post");
     }
   };
 
@@ -48,8 +48,8 @@ export function Dashboard() {
       await loadPosts();
       setDeletePost(null); // Close the confirmation dialog
     } catch (err) {
-      console.error('Error deleting post:', err);
-      setError('Failed to delete post');
+      console.error("Error deleting post:", err);
+      setError("Failed to delete post");
     }
   };
 
@@ -66,7 +66,7 @@ export function Dashboard() {
       </div>
 
       <div className="bg-white shadow overflow-hidden sm:rounded-md">
-        {(!posts || posts.length === 0) ? (
+        {!posts || posts.length === 0 ? (
           <div className="p-4 text-center text-gray-500">
             No posts yet. Create your first post!
           </div>
@@ -80,7 +80,7 @@ export function Dashboard() {
                     <div className="mt-1 flex items-center space-x-4 text-sm text-gray-500">
                       <span>{formatDate(post.createdAt)}</span>
                       <span>•</span>
-                      <span>{post.isPublished ? 'Published' : 'Draft'}</span>
+                      <span>{post.isPublished ? "Published" : "Draft"}</span>
                     </div>
                   </div>
                   <div className="flex items-center space-x-4">
@@ -89,7 +89,7 @@ export function Dashboard() {
                       size="small"
                       onClick={() => togglePublish(post)}
                     >
-                      {post.isPublished ? 'Unpublish' : 'Publish'}
+                      {post.isPublished ? "Unpublish" : "Publish"}
                     </Button>
                     <Link to={`/posts/${post.id}/edit`}>
                       <Button variant="primary" size="small">
@@ -117,19 +117,14 @@ export function Dashboard() {
           <div className="bg-white rounded-lg p-6 max-w-sm w-full">
             <h3 className="text-lg font-medium mb-4">Delete Post</h3>
             <p className="text-gray-500 mb-6">
-              Are you sure you want to delete "{deletePost.title}"? This action cannot be undone.
+              Are you sure you want to delete "{deletePost.title}"? This action
+              cannot be undone.
             </p>
             <div className="flex justify-end space-x-4">
-              <Button
-                variant="secondary"
-                onClick={() => setDeletePost(null)}
-              >
+              <Button variant="secondary" onClick={() => setDeletePost(null)}>
                 Cancel
               </Button>
-              <Button
-                variant="danger"
-                onClick={handleDelete}
-              >
+              <Button variant="danger" onClick={handleDelete}>
                 Delete
               </Button>
             </div>

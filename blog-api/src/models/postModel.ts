@@ -5,14 +5,14 @@ export const create = async (
   title: string,
   text: string,
   authorId: string,
-  isPublished: boolean = false
+  isPublished: boolean = false,
 ) => {
   const data: Prisma.PostCreateInput = {
     title,
     text,
     isPublished,
     author: {
-      connect: { id: authorId }
+      connect: { id: authorId },
     },
   };
   return prisma.post.create({ data });
@@ -21,26 +21,26 @@ export const create = async (
 export const getAll = async (userId: string) => {
   return prisma.post.findMany({
     where: {
-      authorId: userId
-    }
+      authorId: userId,
+    },
   });
 };
 
 export const getAllPublished = async () => {
   return prisma.post.findMany({
     where: {
-      isPublished: true
+      isPublished: true,
     },
     include: {
       author: {
         select: {
-          username: true
-        }
-      }
+          username: true,
+        },
+      },
     },
     orderBy: {
-      publishedAt: 'desc'
-    }
+      publishedAt: "desc",
+    },
   });
 };
 
@@ -51,28 +51,25 @@ export const getById = async (id: string) => {
       author: true,
       comments: {
         include: {
-          user: true
+          user: true,
         },
         orderBy: {
-          createdAt: 'desc'
-        }
-      }
-    }
+          createdAt: "desc",
+        },
+      },
+    },
   });
 };
 
-export const update = async (
-  id: string,
-  data: Prisma.PostUpdateInput
-) => {
+export const update = async (id: string, data: Prisma.PostUpdateInput) => {
   const updateData: Prisma.PostUpdateInput = {
     ...data,
-    publishedAt: data.isPublished ? new Date() : null
+    publishedAt: data.isPublished ? new Date() : null,
   };
-  
+
   return prisma.post.update({
     where: { id },
-    data: updateData
+    data: updateData,
   });
 };
 

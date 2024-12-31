@@ -1,6 +1,6 @@
-import { useState, useEffect, createContext, useContext } from 'react';
-import { User, LoginCredentials, AuthResponse } from '../types/authTypes';
-import { apiClient } from '../utils/apiClient';
+import { useState, useEffect, createContext, useContext } from "react";
+import { User, LoginCredentials, AuthResponse } from "../types/authTypes";
+import { apiClient } from "../utils/apiClient";
 
 interface AuthContextType {
   user: User | null;
@@ -9,12 +9,14 @@ interface AuthContextType {
   logout: () => Promise<void>;
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined,
+);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
@@ -32,7 +34,7 @@ export const useAuthProvider = () => {
       }
 
       try {
-        const response = await apiClient.get<AuthResponse>('/auth/verify');
+        const response = await apiClient.get<AuthResponse>("/auth/verify");
         setUser(response.user);
       } catch (err) {
         apiClient.removeToken();
@@ -46,14 +48,17 @@ export const useAuthProvider = () => {
   }, []);
 
   const login = async (credentials: LoginCredentials) => {
-    const response = await apiClient.post<AuthResponse>('/auth/login', credentials);
+    const response = await apiClient.post<AuthResponse>(
+      "/auth/login",
+      credentials,
+    );
     apiClient.setToken(response.token);
     setUser(response.user);
   };
 
   const logout = async () => {
     try {
-      await apiClient.get('/auth/logout');
+      await apiClient.get("/auth/logout");
     } finally {
       apiClient.removeToken();
       setUser(null);

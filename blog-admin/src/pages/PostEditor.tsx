@@ -1,18 +1,18 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Post } from '../../../shared/types/postTypes';
-import { apiClient } from '../../../shared/utils/apiClient';
-import { Button, Input, TextArea } from '../../../shared/components/ui';
+import { useState, useEffect, useCallback } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Post } from "../../../shared/types/postTypes";
+import { apiClient } from "../../../shared/utils/apiClient";
+import { Button, Input, TextArea } from "../../../shared/components/ui";
 
 export function PostEditor() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [post, setPost] = useState({
-    title: '',
-    text: '',
-    isPublished: false
+    title: "",
+    text: "",
+    isPublished: false,
   });
 
   const loadPost = useCallback(async () => {
@@ -22,8 +22,8 @@ export function PostEditor() {
       const { title, text, isPublished } = response;
       setPost({ title, text, isPublished });
     } catch (err) {
-      console.error('Error loading post:', err);
-      setError('Failed to load post');
+      console.error("Error loading post:", err);
+      setError("Failed to load post");
     } finally {
       setIsLoading(false);
     }
@@ -35,38 +35,38 @@ export function PostEditor() {
     }
   }, [id, loadPost]);
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    
+    setError("");
+
     try {
       setIsLoading(true);
       if (id) {
         await apiClient.put(`/posts/${id}`, post);
       } else {
-        await apiClient.post('/posts', post);
+        await apiClient.post("/posts", post);
       }
-      navigate('/posts');
+      navigate("/posts");
     } catch (err) {
-      console.error('Error saving post:', err);
-      setError('Failed to save post');
+      console.error("Error saving post:", err);
+      setError("Failed to save post");
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name } = e.target;
-    const value = e.target.type === 'checkbox' 
-      ? (e.target as HTMLInputElement).checked 
-      : e.target.value;
-    
-    setPost(prev => ({
+    const value =
+      e.target.type === "checkbox"
+        ? (e.target as HTMLInputElement).checked
+        : e.target.value;
+
+    setPost((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -78,7 +78,7 @@ export function PostEditor() {
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">
-          {id ? 'Edit Post' : 'Create New Post'}
+          {id ? "Edit Post" : "Create New Post"}
         </h1>
         <div className="flex items-center space-x-4">
           <label className="flex items-center space-x-2">
@@ -92,14 +92,12 @@ export function PostEditor() {
             <span>Published</span>
           </label>
           <Button type="submit" isLoading={isLoading}>
-            {id ? 'Update' : 'Create'}
+            {id ? "Update" : "Create"}
           </Button>
         </div>
       </div>
 
-      {error && (
-        <div className="text-red-600">{error}</div>
-      )}
+      {error && <div className="text-red-600">{error}</div>}
 
       <Input
         label="Title"

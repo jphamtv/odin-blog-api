@@ -1,18 +1,14 @@
 import { PrismaClient, Prisma } from "@prisma/client";
 const prisma = new PrismaClient();
 
-export const create = async (
-  text: string,
-  userId: string,
-  postId: string
-) => {
+export const create = async (text: string, userId: string, postId: string) => {
   const data: Prisma.CommentCreateInput = {
     text,
     post: {
-      connect: { id: postId }
+      connect: { id: postId },
     },
     user: {
-      connect: { id: userId }
+      connect: { id: userId },
     },
   };
   return prisma.comment.create({
@@ -21,10 +17,10 @@ export const create = async (
       user: {
         select: {
           id: true,
-          username: true
-        }
-      }
-    }
+          username: true,
+        },
+      },
+    },
   });
 };
 
@@ -35,16 +31,15 @@ export const getAll = async (postId: string) => {
       user: {
         select: {
           id: true,
-          username: true
-        }
-      }
+          username: true,
+        },
+      },
     },
     orderBy: {
-      createdAt: 'desc'
-    }
+      createdAt: "desc",
+    },
   });
 };
-
 
 export const getById = async (id: string) => {
   return prisma.comment.findUnique({
@@ -53,18 +48,18 @@ export const getById = async (id: string) => {
       user: {
         select: {
           id: true,
-          username: true
-        }
-      }
-    }
+          username: true,
+        },
+      },
+    },
   });
 };
 
-export const update = async ( id: string, text: string) => {
+export const update = async (id: string, text: string) => {
   const updateData: Prisma.CommentUpdateInput = {
     text,
   };
-  
+
   return prisma.comment.update({
     where: { id },
     data: updateData,
@@ -72,10 +67,10 @@ export const update = async ( id: string, text: string) => {
       user: {
         select: {
           id: true,
-          username: true
-        }
-      }
-    }
+          username: true,
+        },
+      },
+    },
   });
 };
 

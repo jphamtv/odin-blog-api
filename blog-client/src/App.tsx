@@ -1,10 +1,10 @@
-import { Routes, Route } from 'react-router-dom'
-import { AuthProvider } from '../../shared/components/auth'
-import { Layout } from './components/Layout'
-import Home from './pages/Home'
-import Post from './pages/Post'
-import Login from './pages/Login'
-import Register from './pages/Register'
+import { Routes, Route } from "react-router-dom";
+import { AuthProvider } from "../../shared/components/auth";
+import { Layout } from "./components/Layout";
+import Home from "./pages/Home";
+import Post from "./pages/Post";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
         </Route>
       </Routes>
     </AuthProvider>
-  )
+  );
 }
 
-export default App
+export default App;

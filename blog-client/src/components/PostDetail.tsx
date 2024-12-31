@@ -1,8 +1,8 @@
-import { Post } from '../../../shared/types/postTypes'
-import { formatDate } from '../../../shared/utils/dateUtils';
+import { Post } from "../../../shared/types/postTypes";
+import { formatDate } from "../../../shared/utils/dateUtils";
 
 interface PostDetailProps {
-  post: Post
+  post: Post;
 }
 
 export default function PostDetail({ post }: PostDetailProps) {
@@ -15,5 +15,5 @@ export default function PostDetail({ post }: PostDetailProps) {
       </div>
       <div className="whitespace-pre-wrap">{post.text}</div>
     </article>
-  )
+  );
 }

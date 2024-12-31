@@ -1,6 +1,6 @@
-import { ComponentProps } from 'react';
+import { ComponentProps } from "react";
 
-interface InputProps extends ComponentProps<'input'> {
+interface InputProps extends ComponentProps<"input"> {
   label?: string;
   error?: string;
 }
@@ -8,7 +8,7 @@ interface InputProps extends ComponentProps<'input'> {
 export const Input = ({
   label,
   error,
-  className = '',
+  className = "",
   ...props
 }: InputProps) => {
   return (
@@ -22,14 +22,12 @@ export const Input = ({
         className={`
           w-full rounded border px-3 py-2
           focus:outline-none focus:ring-2
-          ${error ? 'border-red-500' : 'border-gray-300'}
+          ${error ? "border-red-500" : "border-gray-300"}
           ${className}
         `.trim()}
         {...props}
       />
-      {error && (
-        <p className="text-sm text-red-600">{error}</p>
-      )}
+      {error && <p className="text-sm text-red-600">{error}</p>}
     </div>
   );
 };

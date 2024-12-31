@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../shared/hooks/useAuth';
-import { LoginForm } from '../../../shared/components/auth';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../shared/hooks/useAuth";
+import { LoginForm } from "../../../shared/components/auth";
 
 export function Login() {
   const { user } = useAuth();
@@ -9,12 +9,12 @@ export function Login() {
 
   useEffect(() => {
     if (user) {
-      navigate('/posts');
+      navigate("/posts");
     }
   }, [user, navigate]);
 
   const handleSuccess = () => {
-    navigate('/posts');
+    navigate("/posts");
   };
 
   return (

@@ -1,15 +1,15 @@
-import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../../../shared/hooks/useAuth'
-import { Button } from '../../../shared/components/ui'
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../../shared/hooks/useAuth";
+import { Button } from "../../../shared/components/ui";
 
 export function Navbar() {
-  const { user, logout } = useAuth()
-  const navigate = useNavigate()
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await logout()
-    navigate('/')
-  }
+    await logout();
+    navigate("/");
+  };
 
   return (
     <nav className="bg-white shadow">
@@ -20,17 +20,12 @@ export function Navbar() {
               Blog
             </Link>
           </div>
-          
+
           <div className="flex items-center space-x-4">
             {user ? (
               <>
-                <span className="text-gray-600">
-                  {user.username}
-                </span>
-                <Button
-                  variant="secondary"
-                  onClick={handleLogout}
-                >
+                <span className="text-gray-600">{user.username}</span>
+                <Button variant="secondary" onClick={handleLogout}>
                   Logout
                 </Button>
               </>
@@ -48,5 +43,5 @@ export function Navbar() {
         </div>
       </div>
     </nav>
-  )
+  );
 }

@@ -1,5 +1,5 @@
-import { JwtConfig } from '../types/jwtTypes';
-import dotenv from 'dotenv';
+import { JwtConfig } from "../types/jwtTypes";
+import dotenv from "dotenv";
 dotenv.config();
 
 if (!process.env.JWT_SECRET) {
@@ -8,5 +8,5 @@ if (!process.env.JWT_SECRET) {
 
 export const jwtConfig: JwtConfig = {
   secret: process.env.JWT_SECRET,
-  expiresIn: '24h',
+  expiresIn: "24h",
 };

@@ -1,10 +1,10 @@
 import bcrypt from "bcryptjs";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
-import { jwtConfig } from './jwtConfig';
+import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
+import { jwtConfig } from "./jwtConfig";
 import { getByEmail, getById } from "../models/authModel";
-import { JwtPayload } from '../types/jwtTypes';
+import { JwtPayload } from "../types/jwtTypes";
 
 function initialize() {
   // Local Strategy - for login
@@ -33,7 +33,7 @@ function initialize() {
       } catch (error) {
         return done(error);
       }
-    })
+    }),
   );
 
   // JWT Strategy - for protected routes
@@ -53,7 +53,7 @@ function initialize() {
       } catch (err) {
         return done(null, false);
       }
-    })
+    }),
   );
 }
 
